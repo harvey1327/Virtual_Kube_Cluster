@@ -66,14 +66,13 @@ Vagrant.configure(2) do |config|
     node1.vm.hostname = 'node1'
     node1.ssh.insert_key = false
     node1.vm.network :private_network, ip: '192.168.22.101'
-    #node1.vm.network :forwarded_port, guest: 22, host: 10122, id: "ssh"
     node1.vm.provider :virtualbox do |v|
       v.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
       v.customize ['modifyvm', :id, '--memory', 1024]
       v.customize ['modifyvm', :id, '--name', 'node1']
     end
     node1.vm.provision :shell, inline: $pkg_update
-    node1.vm.provision :file, source: '../../.vagrant.d/insecure_private_key', destination: '/home/vagrant/.ssh/id_rsa'
+    node1.vm.provision :file, source: '~/.vagrant.d/insecure_private_key', destination: '/home/vagrant/.ssh/id_rsa'
   end
 
   config.vm.define 'node2' do |node2|
@@ -81,14 +80,13 @@ Vagrant.configure(2) do |config|
     node2.vm.hostname = 'node2'
     node2.ssh.insert_key = false
     node2.vm.network :private_network, ip: '192.168.22.102'
-    #node2.vm.network :forwarded_port, guest: 22, host: 10222, id: "ssh"
     node2.vm.provider :virtualbox do |v|
       v.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
       v.customize ['modifyvm', :id, '--memory', 1024]
       v.customize ['modifyvm', :id, '--name', 'node2']
     end
     node2.vm.provision :shell, inline: $pkg_update
-    node2.vm.provision :file, source: '../../.vagrant.d/insecure_private_key', destination: '/home/vagrant/.ssh/id_rsa'
+    node2.vm.provision :file, source: '~/.vagrant.d/insecure_private_key', destination: '/home/vagrant/.ssh/id_rsa'
   end
 
   config.vm.define 'master' do |master|
@@ -96,7 +94,6 @@ Vagrant.configure(2) do |config|
     master.vm.hostname = 'master'
     master.ssh.insert_key = false
     master.vm.network :private_network, ip: '192.168.22.100'
-    #master.vm.network :forwarded_port, guest: 22, host: 10022, id: 'ssh'
     master.vm.provider :virtualbox do |v|
       v.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
       v.customize ['modifyvm', :id, '--memory', 1024]
