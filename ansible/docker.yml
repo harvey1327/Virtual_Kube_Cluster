@@ -1,4 +1,4 @@
-- hosts: Node
+- hosts: all
   tasks:
     - name: Install yum-utils
       yum:
@@ -16,7 +16,7 @@
       command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
     - name: Update Package Index
       command: yum makecache fast
-    - name: Install Docker-ce
+    - name: Install docker-ce
       yum:
         name: docker-ce
         state: latest
