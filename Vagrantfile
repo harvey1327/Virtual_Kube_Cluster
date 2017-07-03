@@ -7,13 +7,6 @@ yum -y update
 yum -y install tree
 SCRIPT
 
-$kubectl_install = <<SCRIPT
-echo ------------------------------------kubectl_install------------------------------------
-curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-chmod +x ./kubectl
-mv ./kubectl /usr/local/bin/kubectl
-SCRIPT
-
 $ansible_install = <<SCRIPT
 echo ------------------------------------ansible_install------------------------------------
 yum -y install epel-release
@@ -40,6 +33,13 @@ yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce
 yum install -y docker-ce
 systemctl enable docker
 usermod -aG docker vagrant
+SCRIPT
+
+$kubectl_install = <<SCRIPT
+echo ------------------------------------kubectl_install------------------------------------
+curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+chmod +x ./kubectl
+mv ./kubectl /usr/local/bin/kubectl
 SCRIPT
 
 $kubelet_kubeadm_install = <<SCRIPT
@@ -103,6 +103,7 @@ Vagrant.configure(2) do |config|
     master.vm.provision :shell, inline: $ansible_install
     master.vm.provision :shell, inline: $ssh_config
     master.vm.provision :file, source: '~/.vagrant.d/insecure_private_key', destination: '/home/vagrant/.ssh/id_rsa'
+    master.vm.provision :file, source: './ansible/docker.yml', destination: '/home/vagrant/ansible/docker.yml'
   end
 
 end

@@ -1,0 +1,28 @@
+- hosts: Node
+  tasks:
+    - name: Install yum-utils
+      yum:
+        name: yum-utils
+        state: latest
+    - name: Install device-mapper-persistent-data
+      yum:
+        name: device-mapper-persistent-data
+        state: latest
+    - name: Install lvm2
+      yum:
+        name: lvm2
+        state: latest
+    - name: Add Docker Repo
+      command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+    - name: Update Package Index
+      command: yum makecache fast
+    - name: Install Docker-ce
+      yum:
+        name: docker-ce
+        state: latest
+    - name: Start Docker dameon
+      command: systemctl start docker
+    - name: Enable Docker dameon on startup
+      command: systemctl enable docker
+    - name: Enable Sudoless docker
+      command: usermod -aG docker vagrant
