@@ -5,6 +5,7 @@ $pkg_update = <<SCRIPT
 echo ------------------------------------pkg_update------------------------------------
 yum -y update
 yum -y install tree
+yum -y install vim
 SCRIPT
 
 $ansible_install = <<SCRIPT
@@ -24,6 +25,11 @@ touch /home/vagrant/.ssh/known_hosts
 ssh-keyscan -H 192.168.22.100 >> /home/vagrant/.ssh/known_hosts
 ssh-keyscan -H 192.168.22.101 >> /home/vagrant/.ssh/known_hosts
 ssh-keyscan -H 192.168.22.102 >> /home/vagrant/.ssh/known_hosts
+SCRIPT
+
+$run_ansible_playbook = <<SCRIPT
+echo ------------------------------------run_ansible_playbook------------------------------------
+ansible-playbook -s /home/vagrant/ansible/tooling.yml
 SCRIPT
 
 $docker_install = <<SCRIPT
