@@ -1,0 +1,28 @@
+- name: Download kubectl
+  get_url:
+    url: https://storage.googleapis.com/kubernetes-release/release/v1.7.0/bin/linux/amd64/kubectl
+    dest: /usr/local/bin/kubectl
+  notify: "Enable kubectl"
+
+- meta: flush_handlers
+
+- name: Add kubernetes repo
+  copy:
+    src: kubernetes.repo
+    dest: /etc/yum.repos.d/kubernetes.repo
+
+- name: Modify SELinux Permissive
+  command: setenforce 0
+
+- name: Install kubelet
+  yum:
+    name: kubelet
+    state: latest
+  notify: "Enable kubelet"
+
+- meta: flush_handlers
+
+- name: Install kubeadm
+  yum:
+    name: kubeadm
+    state: latest

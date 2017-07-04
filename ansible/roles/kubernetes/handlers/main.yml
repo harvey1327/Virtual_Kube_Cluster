@@ -1,0 +1,11 @@
+- name: Make kubectl executable
+  command: chmod +x /usr/local/bin/kubectl
+  listen: "Enable kubectl"
+
+- name: Start kubelet
+  command: systemctl start kubelet
+  listen: "Enable kubelet"
+
+- name: Enable kubelet at startup
+  command: systemctl enable kubelet
+  listen: "Enable kubelet"
