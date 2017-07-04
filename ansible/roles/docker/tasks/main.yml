@@ -1,0 +1,26 @@
+- name: Install yum-utils
+  yum:
+    name: yum-utils
+    state: latest
+
+- name: Install device-mapper-persistent-data
+  yum:
+    name: device-mapper-persistent-data
+    state: latest
+
+- name: Install lvm2
+  yum:
+    name: lvm2
+    state: latest
+
+- name: Add Docker Repo
+  command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  notify: "Refresh package index"
+
+- meta: flush_handlers
+
+- name: Install docker-ce
+  yum:
+    name: docker-ce
+    state: latest
+  notify: "Enable docker"

@@ -1,0 +1,15 @@
+- name: Start docker dameon
+  command: systemctl start docker
+  listen: "Enable docker"
+
+- name: Enable docker dameon on startup
+  command: systemctl enable docker
+  listen: "Enable docker"
+
+- name: Enable sudoless docker
+  command: usermod -aG docker vagrant
+  listen: "Enable docker"
+
+- name: Update package index
+  command: yum makecache fast
+  listen: "Refresh package index"
