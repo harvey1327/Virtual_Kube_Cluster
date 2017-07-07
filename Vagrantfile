@@ -27,11 +27,6 @@ ssh-keyscan -H 192.168.22.101 >> /home/vagrant/.ssh/known_hosts
 ssh-keyscan -H 192.168.22.102 >> /home/vagrant/.ssh/known_hosts
 SCRIPT
 
-$run_ansible_playbook = <<SCRIPT
-echo ------------------------------------run_ansible_playbook------------------------------------
-ansible-playbook -s /home/vagrant/ansible/tooling.yml
-SCRIPT
-
 $docker_install = <<SCRIPT
 echo ------------------------------------docker_install------------------------------------
 yum install -y yum-utils device-mapper-persistent-data lvm2
@@ -109,7 +104,11 @@ Vagrant.configure(2) do |config|
     master.vm.provision :shell, inline: $ansible_install
     master.vm.provision :shell, inline: $ssh_config
     master.vm.provision :file, source: '~/.vagrant.d/insecure_private_key', destination: '/home/vagrant/.ssh/id_rsa'
-    master.vm.provision :file, source: './ansible', destination: '/home/vagrant/ansible'
+    #master.vm.provision :file, source: './ansible', destination: '/home/vagrant/ansible'
+    master.vm.provision 'ansible_local' do |ansible|
+      ansible.sudo = true
+      ansible.playbook = './ansible/tooling.yml'
+    end
   end
 
 end
