@@ -12,11 +12,11 @@ $ansible_install = <<SCRIPT
 echo ------------------------------------ansible_install------------------------------------
 yum -y install epel-release
 yum -y install ansible
-echo '[Master]' >> /etc/ansible/hosts
-echo '192.168.22.100' >> /etc/ansible/hosts
-echo '[Node]' >> /etc/ansible/hosts
-echo '192.168.22.101' >> /etc/ansible/hosts
-echo '192.168.22.102' >> /etc/ansible/hosts
+#echo '[Master]' >> /etc/ansible/hosts
+#echo '192.168.22.100' >> /etc/ansible/hosts
+#echo '[Node]' >> /etc/ansible/hosts
+#echo '192.168.22.101' >> /etc/ansible/hosts
+#echo '192.168.22.102' >> /etc/ansible/hosts
 SCRIPT
 
 $ssh_config = <<SCRIPT
@@ -25,11 +25,6 @@ touch /home/vagrant/.ssh/known_hosts
 ssh-keyscan -H 192.168.22.100 >> /home/vagrant/.ssh/known_hosts
 ssh-keyscan -H 192.168.22.101 >> /home/vagrant/.ssh/known_hosts
 ssh-keyscan -H 192.168.22.102 >> /home/vagrant/.ssh/known_hosts
-SCRIPT
-
-$run_ansible_playbook = <<SCRIPT
-echo ------------------------------------run_ansible_playbook------------------------------------
-ansible-playbook -s /home/vagrant/ansible/tooling.yml
 SCRIPT
 
 $docker_install = <<SCRIPT
@@ -109,7 +104,13 @@ Vagrant.configure(2) do |config|
     master.vm.provision :shell, inline: $ansible_install
     master.vm.provision :shell, inline: $ssh_config
     master.vm.provision :file, source: '~/.vagrant.d/insecure_private_key', destination: '/home/vagrant/.ssh/id_rsa'
-    master.vm.provision :file, source: './ansible', destination: '/home/vagrant/ansible'
+    #master.vm.provision :file, source: './ansible', destination: '/home/vagrant/ansible'
+    master.vm.provision 'ansible_local' do |ansible|
+      ansible.sudo = true
+      ansible.inventory_path = './ansible/inventory.yml'
+      ansible.limit = 'all'
+      ansible.playbook = './ansible/tooling.yml'
+    end
   end
 
 end
