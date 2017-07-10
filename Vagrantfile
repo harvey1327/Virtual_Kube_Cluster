@@ -104,9 +104,11 @@ Vagrant.configure(2) do |config|
     master.vm.provision :shell, inline: $ansible_install
     master.vm.provision :shell, inline: $ssh_config
     master.vm.provision :file, source: '~/.vagrant.d/insecure_private_key', destination: '/home/vagrant/.ssh/id_rsa'
-    #master.vm.provision :file, source: './ansible', destination: '/home/vagrant/ansible'
+    master.vm.provision :file, source: './ansible', destination: '/home/vagrant/ansible'
     master.vm.provision 'ansible_local' do |ansible|
       ansible.sudo = true
+      ansible.inventory_path = './ansible/inventory.yml'
+      ansible.limit = 'all'
       ansible.playbook = './ansible/tooling.yml'
     end
   end
